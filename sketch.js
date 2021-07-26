@@ -1,8 +1,9 @@
 var dog,sadDog,happyDog;
 var foodObj;
 var foodStock;
-var FedTime,lastFed,feed,addFood;
-var readPosition,showError;
+var foodS;
+var fedTime,lastFed,feed,addFood;
+var database;
 
 function preload(){
   sadDog=loadImage("Images/Dog.png");
@@ -33,14 +34,26 @@ function setup() {
 
 function draw() {
   background(46,139,87);
+  fill(255,255,254);
+  textSize(15);
+  if(lastFed>=12){
+    text("Last Feed:"+lastFed%12 +"PM",350,30);
+  }else if(lastFed==0){
+    text("Last Feed:12 AM",350,30);
+  }else{
+    text("Last Feed : "+ lastFed + "AM",350,30);
+  }
+  fedTime=database.ref('FeedTime');
+  fedTime.on("value",function(data){
+    lastFed=data.val();
+  });
   drawSprites();
 }
 function readPosition(data){
-  position = data.val();
-  food.x = position.x;
-  food.y = position.y;
+ foodS=data.val()
+ foodObj.updateFoodStock(foodS);
 }
-function ShowError(){
+function showError(){
   console.log("ERROR")
 }
 //function to add food in stock
@@ -59,6 +72,10 @@ function feedDog(){
   }else{
     foodObj.updateFoodStock(foodObj.getFoodStock()=1);
   }
+  database.ref("/").update({
+    Food:foodObj.getFoodStock(),
+    FeedTime:hour()
+  })
 }
 
 //function to update food stock and last fed time

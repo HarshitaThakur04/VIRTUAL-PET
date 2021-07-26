@@ -1,7 +1,7 @@
 class Food{
     constructor(){
     this.foodStock = 0;
-    this.image=loadImage("images/Milk.png");
+    this.image=loadImage("Images/Milk.png");
     this.lastFed;
 }
 
@@ -10,11 +10,9 @@ class Food{
     }
 
     getFedTime(lastFed){
-        FedTime=database.ref('FeedTime')
-        FedTime.on("value",function(data){
-        lastFed=data.val();
-        } 
-        )};
+       this.lastFed=lastFed;
+    } 
+        
 
     deductFood(){
         if(this.foodStock > 0){
@@ -23,7 +21,7 @@ class Food{
     }
 
     getFoodStock(){
-        return thiis.foodStock;
+        return this.foodStock;
     }
 
     display(){
